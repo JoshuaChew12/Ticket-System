@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
@@ -16,10 +15,7 @@
     content="#ffffff"
   >
 
-  <title>
-    Ticket Sales System
-  </title>
-
+  <title>Ticket Sales System</title>
 
   <link
     rel="stylesheet"
@@ -31,17 +27,16 @@
 
 <body>
 
-
   <div id="app">
 
+
+    <!-- HEADER -->
 
     <header class="app-header">
 
       <div>
 
-        <h1>
-          Ticket Sales
-        </h1>
+        <h1>Ticket Sales</h1>
 
         <p>
           Ticket Management System
@@ -52,47 +47,172 @@
     </header>
 
 
+
+    <!-- MAIN -->
+
     <main class="app-content">
 
 
+      <!-- SYSTEM STATUS -->
+
       <section class="card">
 
-        <h2>
-          System Status
-        </h2>
+        <h2>System Status</h2>
 
         <div
           id="systemStatus"
           class="status"
         >
-
           Connecting...
-
         </div>
 
       </section>
 
 
+
+      <!-- TICKET TYPES -->
+
       <section class="card">
 
-        <h2>
-          Ticket Types
-        </h2>
-
+        <h2>Ticket Types</h2>
 
         <div
           id="ticketTypes"
           class="ticket-types"
         >
-
           Loading...
-
         </div>
 
       </section>
 
 
+
+      <!-- BOOK SELECTION -->
+
+      <section
+        id="bookSelection"
+        class="card hidden"
+      >
+
+        <div class="section-header">
+
+          <div>
+
+            <h2 id="bookSelectionTitle">
+              Select Books
+            </h2>
+
+            <p
+              id="bookSelectionSubtitle"
+              class="section-subtitle"
+            >
+              Select available books
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="bookList"
+          class="book-list"
+        >
+        </div>
+
+
+      </section>
+
+
+
+      <!-- SELECTED BOOKS -->
+
+      <section
+        id="selectedSection"
+        class="card hidden"
+      >
+
+        <h2>
+          Selected Books
+        </h2>
+
+
+        <div
+          id="selectedBooks"
+          class="selected-books"
+        >
+        </div>
+
+
+      </section>
+
+
+
     </main>
+
+
+
+    <!-- BOTTOM SUMMARY -->
+
+    <div
+      id="selectionSummary"
+      class="selection-summary hidden"
+    >
+
+      <div class="summary-content">
+
+
+        <div class="summary-stat">
+
+          <span>
+            Books
+          </span>
+
+          <strong id="selectedBookCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="summary-stat">
+
+          <span>
+            Tickets
+          </span>
+
+          <strong id="selectedTicketCount">
+            0
+          </strong>
+
+        </div>
+
+
+        <div class="summary-stat">
+
+          <span>
+            Total
+          </span>
+
+          <strong id="selectedTotalAmount">
+            RM0
+          </strong>
+
+        </div>
+
+
+      </div>
+
+
+      <button
+        id="continueBtn"
+        class="primary-button"
+        disabled
+      >
+        Continue
+      </button>
+
+    </div>
 
 
   </div>
@@ -103,7 +223,6 @@
   <script src="js/tickets.js"></script>
 
   <script src="js/app.js"></script>
-
 
 </body>
 
