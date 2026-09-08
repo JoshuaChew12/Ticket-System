@@ -1,7 +1,3 @@
-// =====================================================
-// INIT
-// =====================================================
-
 async function initApp() {
 
   const status =
@@ -32,8 +28,12 @@ async function initApp() {
     }
 
 
+    window.ticketState.pricing =
+      result.data || [];
+
+
     renderTicketTypes(
-      result.data
+      window.ticketState.pricing
     );
 
 
@@ -53,6 +53,48 @@ async function initApp() {
   }
 
 }
+
+
+/* =====================================
+   CONTINUE
+===================================== */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    const continueBtn =
+      document.getElementById(
+        "continueBtn"
+      );
+
+
+    continueBtn.addEventListener(
+      "click",
+      () => {
+
+        const selected =
+          window.ticketState
+            .selectedBooks;
+
+
+        console.log(
+          "Selected books:",
+          selected
+        );
+
+
+        alert(
+          "Selected " +
+          selected.length +
+          " book(s)."
+        );
+
+      }
+    );
+
+  }
+);
 
 
 document.addEventListener(
