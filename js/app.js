@@ -54,6 +54,9 @@ async function initApp() {
     );
 
   });
+
+  document.getElementById("createSaleBtn")
+  .onclick = submitSale;
 }
 
 function continueSale() {
