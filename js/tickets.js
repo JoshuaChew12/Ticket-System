@@ -702,6 +702,41 @@ function renderSaleDetail(result) {
     "searchSection"
   ).classList.add("hidden");
 
+  const paymentSection =
+  document.getElementById(
+    "paymentSection"
+  );
+
+if (Number(sale.balance) > 0) {
+
+  paymentSection.classList.remove(
+    "hidden"
+  );
+
+  document.getElementById(
+    "paymentAmount"
+  ).value = "";
+
+  document.getElementById(
+    "paymentMethod"
+  ).value = "";
+
+  document.getElementById(
+    "paymentReference"
+  ).value = "";
+
+  document.getElementById(
+    "paymentRemark"
+  ).value = "";
+
+} else {
+
+  paymentSection.classList.add(
+    "hidden"
+  );
+
+}
+
   document.getElementById(
     "saleDetailSection"
   ).classList.remove("hidden");
@@ -721,3 +756,114 @@ document.getElementById(
   ).classList.remove("hidden");
 
 };
+
+async function recordSalePayment(data) {
+
+  return apiPost(
+    "recordPayment",
+    data
+  );
+
+}
+
+async function submitSalePayment() {
+
+  const saleId =
+    document.querySelector(
+      ".sale-detail-header strong"
+    ).textContent.trim();
+
+  const amount =
+    Number(
+      document.getElementById(
+        "paymentAmount"
+      ).value || 0
+    );
+
+  const paymentMethod =
+    document.getElementById(
+      "paymentMethod"
+    ).value;
+
+  const reference =
+    document.getElementById(
+      "paymentReference"
+    ).value.trim();
+
+  const remark =
+    document.getElementById(
+      "paymentRemark"
+    ).value.trim();
+
+  if (amount <= 0) {
+
+    alert(
+      "Payment amount must be greater than 0."
+    );
+
+    return;
+  }
+
+  if (!paymentMethod) {
+
+    alert(
+      "Please select payment method."
+    );
+
+    return;
+  }
+
+  try {
+
+    const btn =
+      document.getElementById(
+        "recordPaymentBtn"
+      );
+
+    btn.disabled = true;
+    btn.textContent = "Processing...";
+
+    await recordSalePayment({
+
+      saleId: saleId,
+      amount: amount,
+      paymentMethod: paymentMethod,
+      reference: reference,
+      remark: remark
+
+    });
+
+    /*
+     * 重新读取 Sale
+     */
+    const updated =
+      await apiGet(
+        "getSale",
+        {
+          saleId: saleId
+        }
+      );
+
+    renderSaleDetail(updated);
+
+    alert(
+      "Payment recorded successfully."
+    );
+
+  } catch (error) {
+
+    alert(error.message);
+
+  } finally {
+
+    const btn =
+      document.getElementById(
+        "recordPaymentBtn"
+      );
+
+    btn.disabled = false;
+    btn.textContent = "Record Payment";
+
+  }
+
+}
