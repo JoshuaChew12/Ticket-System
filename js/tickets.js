@@ -249,7 +249,7 @@ async function submitSale() {
     paymentStatus,
     paidAmount,
     paymentMethod,
-    books: books.map(book => ({
+    items: books.map(book => ({
       bookId: book.bookId,
       type: book.type
     }))
