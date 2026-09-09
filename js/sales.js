@@ -11,14 +11,14 @@ async function searchSales(){
   const keyword=input.value.trim();
 
   if(!keyword){
-    status.innerHTML=`<div class="status">Enter a search keyword.</div>`;
+    status.innerHTML='<div class="status">Enter a search keyword.</div>';
     results.innerHTML="";
     return;
   }
 
   try{
 
-    status.innerHTML=`<div class="status">Searching...</div>`;
+    status.innerHTML='<div class="status">Searching...</div>';
     results.innerHTML="";
 
     const response=await apiGet(
@@ -31,14 +31,13 @@ async function searchSales(){
     renderSaleSearchResults();
 
     status.innerHTML=window.salesState.searchResults.length
-      ? ""
-      : `<div class="status">No sales found.</div>`;
+      ?""
+      :'<div class="status">No sales found.</div>';
 
   }catch(error){
 
     status.innerHTML=
       `<div class="status">${escapeHtml(error.message)}</div>`;
-
   }
 }
 
@@ -70,18 +69,17 @@ function renderSaleSearchResults(){
 
 async function openSaleDetail(saleId){
 
+  window.salesState.currentSaleId=saleId;
+
+  const section=document.getElementById("saleDetailSection");
+  const detail=document.getElementById("saleDetail");
+  const payment=document.getElementById("paymentSection");
+
+  section.classList.remove("hidden");
+  payment.classList.add("hidden");
+  detail.innerHTML='<div class="status">Loading...</div>';
+
   try{
-
-    window.salesState.currentSaleId=saleId;
-
-    document.getElementById("saleDetailSection")
-      .classList.remove("hidden");
-
-    document.getElementById("saleDetail").innerHTML=
-      `<div class="status">Loading...</div>`;
-
-    document.getElementById("paymentSection")
-      .classList.add("hidden");
 
     const result=await apiGet(
       "getSale",
@@ -90,14 +88,12 @@ async function openSaleDetail(saleId){
 
     renderSaleDetail(result);
 
-    document.getElementById("saleDetailSection")
-      .scrollIntoView({behavior:"smooth"});
+    section.scrollIntoView({behavior:"smooth"});
 
   }catch(error){
 
-    document.getElementById("saleDetail").innerHTML=
+    detail.innerHTML=
       `<div class="status">${escapeHtml(error.message)}</div>`;
-
   }
 }
 
@@ -107,9 +103,7 @@ function renderSaleDetail(result){
   const items=result.items||[];
   const payments=result.payments||[];
 
-  const detail=document.getElementById("saleDetail");
-
-  detail.innerHTML=`
+  document.getElementById("saleDetail").innerHTML=`
 
     <div class="sale-detail-header">
       <span>Sale ID</span>
@@ -126,7 +120,6 @@ function renderSaleDetail(result){
     <div class="sale-detail-books">
 
       ${items.map(item=>`
-
         <div class="sale-detail-book">
 
           <div>
@@ -140,42 +133,25 @@ function renderSaleDetail(result){
           </div>
 
         </div>
-
       `).join("")}
 
     </div>
 
     <div class="sale-detail-total">
 
-      <div>
-        <span>Total Books</span>
-        <strong>${sale.totalBooks||0}</strong>
-      </div>
-
-      <div>
-        <span>Total Tickets</span>
-        <strong>${sale.totalTickets||0}</strong>
-      </div>
-
-      <div>
-        <span>Total Amount</span>
-        <strong>RM${Number(sale.totalAmount||0).toLocaleString()}</strong>
-      </div>
-
-      <div>
-        <span>Paid</span>
-        <strong>RM${Number(sale.paidAmount||0).toLocaleString()}</strong>
-      </div>
-
-      <div>
-        <span>Balance</span>
-        <strong>RM${Number(sale.balance||0).toLocaleString()}</strong>
-      </div>
-
-      <div>
-        <span>Payment Status</span>
-        <strong>${escapeHtml(sale.paymentStatus||"-")}</strong>
-      </div>
+      ${[
+        ["Total Books",sale.totalBooks],
+        ["Total Tickets",sale.totalTickets],
+        ["Total Amount","RM"+Number(sale.totalAmount||0).toLocaleString()],
+        ["Paid","RM"+Number(sale.paidAmount||0).toLocaleString()],
+        ["Balance","RM"+Number(sale.balance||0).toLocaleString()],
+        ["Payment Status",sale.paymentStatus||"-"]
+      ].map(x=>`
+        <div>
+          <span>${x[0]}</span>
+          <strong>${escapeHtml(x[1])}</strong>
+        </div>
+      `).join("")}
 
     </div>
 
@@ -185,8 +161,7 @@ function renderSaleDetail(result){
 
       ${
         payments.length
-        ? payments.map(payment=>`
-
+        ?payments.map(payment=>`
           <div class="payment-row">
 
             <div>
@@ -204,26 +179,24 @@ function renderSaleDetail(result){
             </small>
 
           </div>
-
         `).join("")
-        : `<div class="status">No payment recorded.</div>`
+        :'<div class="status">No payment recorded.</div>'
       }
 
     </div>
   `;
 
-  const paymentSection=
-    document.getElementById("paymentSection");
+  document.getElementById("paymentSection")
+    .classList.toggle(
+      "hidden",
+      Number(sale.balance||0)<=0
+    );
 
-  paymentSection.classList.toggle(
-    "hidden",
-    Number(sale.balance||0)<=0
-  );
-
-  document.getElementById("paymentAmount").value="";
-  document.getElementById("salePaymentMethod").value="";
-  document.getElementById("paymentReference").value="";
-  document.getElementById("paymentRemark").value="";
+  ["paymentAmount","salePaymentMethod",
+   "paymentReference","paymentRemark"]
+    .forEach(id=>{
+      document.getElementById(id).value="";
+    });
 }
 
 async function recordSalePayment(){
@@ -254,23 +227,20 @@ async function recordSalePayment(){
     return;
   }
 
-  try{
+  const btn=document.getElementById("recordPaymentBtn");
 
-    const btn=document.getElementById("recordPaymentBtn");
+  try{
 
     btn.disabled=true;
     btn.textContent="Recording...";
 
-    await apiPost(
-      "recordPayment",
-      {
-        saleId,
-        amount,
-        paymentMethod,
-        reference,
-        remark
-      }
-    );
+    await apiPost("recordPayment",{
+      saleId,
+      amount,
+      paymentMethod,
+      reference,
+      remark
+    });
 
     await openSaleDetail(saleId);
 
@@ -281,8 +251,6 @@ async function recordSalePayment(){
     alert(error.message);
 
   }finally{
-
-    const btn=document.getElementById("recordPaymentBtn");
 
     btn.disabled=false;
     btn.textContent="Record Payment";
@@ -314,14 +282,9 @@ function escapeHtml(value){
 
 function initSales(){
 
-  document.getElementById("saleSearchBtn").onclick=
-    searchSales;
-
-  document.getElementById("recordPaymentBtn").onclick=
-    recordSalePayment;
-
-  document.getElementById("backToSaleSearchBtn").onclick=
-    backToSaleSearch;
+  document.getElementById("saleSearchBtn").onclick=searchSales;
+  document.getElementById("recordPaymentBtn").onclick=recordSalePayment;
+  document.getElementById("backToSaleSearchBtn").onclick=backToSaleSearch;
 
   document.getElementById("saleSearchInput").onkeydown=e=>{
     if(e.key==="Enter")searchSales();
