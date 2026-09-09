@@ -362,3 +362,60 @@ body {
 textarea.form-input {
   resize: vertical;
 }
+
+.preview-customer {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #f3f4f6;
+  border-radius: 12px;
+}
+
+.preview-customer span,
+.preview-customer small {
+  color: #6b7280;
+}
+
+.preview-book {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.preview-book span {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.preview-total {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 2px solid #e5e7eb;
+}
+
+.preview-total span {
+  color: #6b7280;
+}
+
+.preview-total strong {
+  text-align: right;
+}
+
+.payment-options {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.payment-options label {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+}
