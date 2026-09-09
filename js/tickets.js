@@ -211,3 +211,75 @@ function escapeHtml(value) {
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
 }
+
+async function submitSale() {
+  const books = window.ticketState.selectedBooks;
+
+  if (!books.length) {
+    alert("Please select at least one book.");
+    return;
+  }
+
+  const name =
+    document.getElementById("customerName").value.trim();
+
+  const phone =
+    document.getElementById("customerPhone").value.trim();
+
+  const remark =
+    document.getElementById("customerRemark").value.trim();
+
+  const paymentStatus =
+    document.querySelector(
+      'input[name="paymentStatus"]:checked'
+    ).value;
+
+  const paidAmount =
+    Number(
+      document.getElementById("paidAmount").value || 0
+    );
+
+  const paymentMethod =
+    document.getElementById("paymentMethod").value;
+
+  const data = {
+    name,
+    phone,
+    remark,
+    paymentStatus,
+    paidAmount,
+    paymentMethod,
+    books: books.map(book => ({
+      bookId: book.bookId,
+      type: book.type
+    }))
+  };
+
+  try {
+    const btn =
+      document.getElementById("createSaleBtn");
+
+    btn.disabled = true;
+    btn.textContent = "Creating...";
+
+    const result =
+      await apiPost("createSale", data);
+
+    console.log("Sale created:", result);
+
+    alert(
+      "Sale created successfully.\n\nSale ID: " +
+      result.data.saleId
+    );
+
+  } catch (error) {
+    alert(error.message);
+
+  } finally {
+    const btn =
+      document.getElementById("createSaleBtn");
+
+    btn.disabled = false;
+    btn.textContent = "Create Sale";
+  }
+}
