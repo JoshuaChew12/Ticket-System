@@ -1,68 +1,50 @@
-const pages = ["home","tickets","sales","return"];
+const pages=["home","tickets","sales","return"];
 
-async function loadPage(page) {
+const pageInit={
+  home:()=>typeof initHome==="function"&&initHome(),
+  tickets:()=>typeof initTickets==="function"&&initTickets(),
+  sales:()=>typeof initSales==="function"&&initSales(),
+  return:()=>typeof initReturn==="function"&&initReturn()
+};
 
-  if (!pages.includes(page)) page = "home";
+async function loadPage(page){
 
-  const box = document.getElementById("pageContent");
+  if(!pages.includes(page))page="home";
 
-  try {
+  const box=document.getElementById("pageContent");
 
-    box.innerHTML = "<div class=\"status\">Loading...</div>";
+  try{
 
-    const response = await fetch(page + ".html");
+    box.innerHTML='<div class="status">Loading...</div>';
 
-    if (!response.ok) {
+    const response=await fetch(page+".html");
+
+    if(!response.ok){
       throw new Error("Page load failed.");
     }
 
-    box.innerHTML = await response.text();
+    box.innerHTML=await response.text();
 
-    document
-      .querySelectorAll(".bottom-nav button")
-      .forEach(btn =>
+    document.querySelectorAll(".bottom-nav button")
+      .forEach(btn=>{
         btn.classList.toggle(
           "active",
-          btn.dataset.page === page
-        )
-      );
+          btn.dataset.page===page
+        );
+      });
 
-    if (page === "home" && typeof initHome === "function") {
-      initHome();
-    }
+    await pageInit[page]?.();
 
-    if (page === "tickets" && typeof initTickets === "function") {
-      initTickets();
-    }
+  }catch(error){
 
-    if (page === "sales" && typeof initSales === "function") {
-      initSales();
-    }
-
-    if (page === "return" && typeof initReturn === "function") {
-      initReturn();
-    }
-
-  } catch (error) {
-
-    box.innerHTML =
-      `<div class="status">
-        ${error.message}
-      </div>`;
-
+    box.innerHTML=
+      `<div class="status">${error.message}</div>`;
   }
-
 }
 
-
-document
-  .querySelectorAll(".bottom-nav button")
-  .forEach(btn => {
-
-    btn.onclick = () =>
-      loadPage(btn.dataset.page);
-
+document.querySelectorAll(".bottom-nav button")
+  .forEach(btn=>{
+    btn.onclick=()=>loadPage(btn.dataset.page);
   });
-
 
 loadPage("home");
