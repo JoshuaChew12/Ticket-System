@@ -74,6 +74,12 @@ document.getElementById(
 
   }
 ); 
+
+document.getElementById(
+  "recordPaymentBtn"
+).onclick =
+  submitSalePayment;
+  
 }
 
 function continueSale() {
