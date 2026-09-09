@@ -1,294 +1,322 @@
-<section class="card">
+<section class="card ticket-section">  <div class="section-heading">
+    <div>
+      <span class="section-label">STEP 1</span>
+      <h2>Select Ticket</h2>
+    </div>
+  </div>  <div class="ticket-input"><input
+  id="ticketNumber"
+  type="number"
+  inputmode="numeric"
+  placeholder="Enter ticket number"
+>
 
-  <h2>Select Ticket</h2>
+<button id="findTicketBtn">
+  Find
+</button>
 
-  <div class="ticket-input">
-
-    <input
-      id="ticketNumber"
-      type="number"
-      inputmode="numeric"
-      placeholder="Enter ticket number"
-    >
-
-    <button id="findTicketBtn">
-      Find
-    </button>
-
-  </div>
-
-  <div
-    id="ticketResult"
-    class="ticket-result hidden">
-  </div>
-
-</section>
-
-
-<section
-  id="selectedSection"
-  class="card hidden">
-
+  </div>  <div class="input-hint">
+    Enter any ticket number to find its book.
+  </div>  <div id="ticketResult" class="ticket-result hidden"></div></section><section id="selectedSection" class="card ticket-section hidden">  <div class="section-heading"><div>
+  <span class="section-label">STEP 2</span>
   <h2>Selected Books</h2>
+</div>
 
-  <div id="selectedBooks"></div>
+<span class="section-count">
+  Books
+</span>
 
-</section>
-
-
-<section
-  id="customerSection"
-  class="card hidden">
-
+  </div>  <div id="selectedBooks"></div></section><section id="customerSection" class="card ticket-section hidden">  <div class="section-heading"><div>
+  <span class="section-label">STEP 3</span>
   <h2>Customer Information</h2>
+</div>
 
-  <label>Name</label>
+  </div>  <div class="form-group"><label for="customerName">
+  Name
+</label>
 
-  <input
-    id="customerName"
-    class="form-input"
-    type="text"
-    placeholder="Enter customer name"
-  >
+<input
+  id="customerName"
+  class="form-input"
+  type="text"
+  placeholder="Enter customer name"
+  autocomplete="name"
+>
 
-  <label>Phone</label>
+  </div>  <div class="form-group"><label for="customerPhone">
+  Phone
+</label>
 
-  <input
-    id="customerPhone"
-    class="form-input"
-    type="tel"
-    inputmode="tel"
-    placeholder="Enter phone number"
-  >
+<input
+  id="customerPhone"
+  class="form-input"
+  type="tel"
+  inputmode="tel"
+  placeholder="Enter phone number"
+  autocomplete="tel"
+>
 
-  <label>Remark</label>
+  </div>  <div class="form-group"><label for="customerRemark">
+  Remark
+  <span class="optional">Optional</span>
+</label>
 
-  <textarea
-    id="customerRemark"
-    class="form-input"
-    rows="3"
-    placeholder="Optional"
-  ></textarea>
+<textarea
+  id="customerRemark"
+  class="form-input"
+  rows="3"
+  placeholder="Add a remark if needed"
+></textarea>
 
-</section>
-
-
-<section
-  id="previewSection"
-  class="card hidden">
-
+  </div></section><section id="previewSection" class="card ticket-section hidden">  <div class="section-heading"><div>
+  <span class="section-label">STEP 4</span>
   <h2>Sale Preview</h2>
+</div>
 
-  <div id="previewCustomer"></div>
-  <div id="previewBooks"></div>
+  </div>  <div class="preview-customer"><div id="previewCustomer"></div>
 
-  <div class="preview-total">
+  </div>  <div class="preview-books"><div
+  id="previewBooks">
+</div>
 
-    <span>Total Books</span>
-    <strong id="previewBookCount">0</strong>
+  </div>  <div class="preview-total"><span>Total Books</span>
+<strong id="previewBookCount">0</strong>
 
-    <span>Total Tickets</span>
-    <strong id="previewTicketCount">0</strong>
+<span>Total Tickets</span>
+<strong id="previewTicketCount">0</strong>
 
-    <span>Total Amount</span>
-    <strong id="previewAmount">RM0</strong>
+<span>Total Amount</span>
+<strong id="previewAmount">RM0</strong>
 
-  </div>
+  </div>  <div class="payment-block"><span class="section-label">
+  PAYMENT
+</span>
 
-  <h3>Payment Status</h3>
+<h3>Payment Status</h3>
 
-  <div class="payment-options">
+<div class="payment-options">
 
-    <label>
-      <input
-        type="radio"
-        name="paymentStatus"
-        value="UNPAID"
-        checked
-      >
-      Unpaid
-    </label>
-
-    <label>
-      <input
-        type="radio"
-        name="paymentStatus"
-        value="PARTIAL"
-      >
-      Partial
-    </label>
-
-    <label>
-      <input
-        type="radio"
-        name="paymentStatus"
-        value="PAID"
-      >
-      Paid
-    </label>
-
-  </div>
-
-
-  <div id="paidAmountBox" class="hidden">
-
-    <label>Paid Amount</label>
+  <label>
 
     <input
-      id="paidAmount"
-      class="form-input"
-      type="number"
-      min="0"
-      step="0.01"
-      placeholder="Enter paid amount"
+      type="radio"
+      name="paymentStatus"
+      value="UNPAID"
+      checked
     >
 
-  </div>
+    <span>Unpaid</span>
+
+  </label>
 
 
-  <div id="paymentMethodBox" class="hidden">
+  <label>
 
-    <label>Payment Method</label>
-
-    <select
-      id="paymentMethod"
-      class="form-input"
+    <input
+      type="radio"
+      name="paymentStatus"
+      value="PARTIAL"
     >
 
-      <option value="">
-        Select method
-      </option>
+    <span>Partial</span>
 
-      <option value="CASH">
-        Cash
-      </option>
-
-      <option value="BANK_TRANSFER">
-        Bank Transfer
-      </option>
-
-      <option value="QR">
-        QR Payment
-      </option>
-
-      <option value="OTHER">
-        Other
-      </option>
-
-    </select>
-
-  </div>
+  </label>
 
 
-  <button
-    id="createSaleBtn"
-    class="primary-button"
-  >
-    Create Sale
-  </button>
+  <label>
 
-
-  <div
-    id="saleResult"
-    class="hidden">
-
-    <div class="success-message">
-      Sale Created Successfully
-    </div>
-
-    <div class="sale-result-card">
-
-      <div>
-        <span>Sale ID</span>
-        <strong id="resultSaleId">-</strong>
-      </div>
-
-      <div>
-        <span>Customer</span>
-        <strong id="resultCustomer">-</strong>
-      </div>
-
-      <div>
-        <span>Phone</span>
-        <strong id="resultPhone">-</strong>
-      </div>
-
-      <div>
-        <span>Books</span>
-        <strong id="resultBooks">0</strong>
-      </div>
-
-      <div>
-        <span>Tickets</span>
-        <strong id="resultTickets">0</strong>
-      </div>
-
-      <div>
-        <span>Total</span>
-        <strong id="resultTotal">RM0</strong>
-      </div>
-
-      <div>
-        <span>Paid</span>
-        <strong id="resultPaid">RM0</strong>
-      </div>
-
-      <div>
-        <span>Balance</span>
-        <strong id="resultBalance">RM0</strong>
-      </div>
-
-      <div>
-        <span>Payment Status</span>
-        <strong id="resultPaymentStatus">-</strong>
-      </div>
-
-    </div>
-
-
-    <button
-      id="newSaleBtn"
-      class="primary-button"
+    <input
+      type="radio"
+      name="paymentStatus"
+      value="PAID"
     >
-      New Sale
-    </button>
 
-  </div>
+    <span>Paid</span>
 
-</section>
+  </label>
+
+</div>
 
 
 <div
-  id="selectionSummary"
-  class="selection-summary hidden">
+  id="paidAmountBox"
+  class="hidden form-group"
+>
 
-  <div class="summary-content">
+  <label for="paidAmount">
+    Paid Amount
+  </label>
 
-    <div>
-      <small>Books</small>
-      <strong id="selectedBookCount">0</strong>
-    </div>
-
-    <div>
-      <small>Tickets</small>
-      <strong id="selectedTicketCount">0</strong>
-    </div>
-
-    <div>
-      <small>Total</small>
-      <strong id="selectedTotalAmount">
-        RM0
-      </strong>
-    </div>
-
-  </div>
-
-  <button
-    id="continueBtn"
-    class="primary-button"
-    disabled
+  <input
+    id="paidAmount"
+    class="form-input"
+    type="number"
+    min="0"
+    step="0.01"
+    placeholder="Enter paid amount"
   >
-    Continue
-  </button>
 
 </div>
+
+
+<div
+  id="paymentMethodBox"
+  class="hidden form-group"
+>
+
+  <label for="paymentMethod">
+    Payment Method
+  </label>
+
+  <select
+    id="paymentMethod"
+    class="form-input"
+  >
+
+    <option value="">
+      Select method
+    </option>
+
+    <option value="CASH">
+      Cash
+    </option>
+
+    <option value="BANK_TRANSFER">
+      Bank Transfer
+    </option>
+
+    <option value="QR">
+      QR Payment
+    </option>
+
+    <option value="OTHER">
+      Other
+    </option>
+
+  </select>
+
+</div>
+
+  </div><button
+id="createSaleBtn"
+class="primary-button"
+
+«»
+
+Create Sale
+
+  </button>  <div
+    id="saleResult"
+    class="hidden"
+  ><div class="success-message">
+  Sale Created Successfully
+</div>
+
+
+<div class="sale-result-card">
+
+  <div>
+    <span>Sale ID</span>
+    <strong id="resultSaleId">-</strong>
+  </div>
+
+  <div>
+    <span>Customer</span>
+    <strong id="resultCustomer">-</strong>
+  </div>
+
+  <div>
+    <span>Phone</span>
+    <strong id="resultPhone">-</strong>
+  </div>
+
+  <div>
+    <span>Books</span>
+    <strong id="resultBooks">0</strong>
+  </div>
+
+  <div>
+    <span>Tickets</span>
+    <strong id="resultTickets">0</strong>
+  </div>
+
+  <div>
+    <span>Total</span>
+    <strong id="resultTotal">RM0</strong>
+  </div>
+
+  <div>
+    <span>Paid</span>
+    <strong id="resultPaid">RM0</strong>
+  </div>
+
+  <div>
+    <span>Balance</span>
+    <strong id="resultBalance">RM0</strong>
+  </div>
+
+  <div>
+    <span>Payment Status</span>
+    <strong id="resultPaymentStatus">-</strong>
+  </div>
+
+</div>
+
+
+<button
+  id="newSaleBtn"
+  class="primary-button"
+>
+  New Sale
+</button>
+
+  </div></section><div
+  id="selectionSummary"
+  class="selection-summary hidden"
+>  <div class="summary-content"><div>
+
+  <small>
+    Books
+  </small>
+
+  <strong id="selectedBookCount">
+    0
+  </strong>
+
+</div>
+
+
+<div>
+
+  <small>
+    Tickets
+  </small>
+
+  <strong id="selectedTicketCount">
+    0
+  </strong>
+
+</div>
+
+
+<div>
+
+  <small>
+    Total
+  </small>
+
+  <strong id="selectedTotalAmount">
+    RM0
+  </strong>
+
+</div>
+
+  </div><button
+id="continueBtn"
+class="primary-button"
+disabled
+
+«»
+
+Continue
+
+  </button></div>
