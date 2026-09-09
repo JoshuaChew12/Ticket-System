@@ -104,6 +104,13 @@ function addFoundBook() {
 
   renderSelectedBooks();
   updateSummary();
+  showCustomerSection();
+}
+
+function showCustomerSection() {
+  document.getElementById(
+    "customerSection"
+  ).classList.remove("hidden");
 }
 
 function removeBook(bookId) {
