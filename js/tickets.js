@@ -267,11 +267,8 @@ async function submitSale() {
 
     console.log("Sale created:", result);
 
-    alert(
-      "Sale created successfully.\n\nSale ID: " +
-      result.saleId
-    );
-
+    showSaleResult(result);
+    
   } catch (error) {
     alert(error.message);
 
@@ -282,4 +279,79 @@ async function submitSale() {
     btn.disabled = false;
     btn.textContent = "Create Sale";
   }
+}
+
+function showSaleResult(result) {
+  document.getElementById("resultSaleId").textContent =
+    result.saleId;
+
+  document.getElementById("resultCustomer").textContent =
+    result.name;
+
+  document.getElementById("resultPhone").textContent =
+    result.phone;
+
+  document.getElementById("resultBooks").textContent =
+    result.totalBooks;
+
+  document.getElementById("resultTickets").textContent =
+    result.totalTickets;
+
+  document.getElementById("resultTotal").textContent =
+    "RM" + Number(result.totalAmount).toLocaleString();
+
+  document.getElementById("resultPaid").textContent =
+    "RM" + Number(result.paidAmount).toLocaleString();
+
+  document.getElementById("resultBalance").textContent =
+    "RM" + Number(result.balance).toLocaleString();
+
+  document.getElementById("resultPaymentStatus").textContent =
+    result.paymentStatus;
+
+  document.getElementById("saleResult")
+    .classList.remove("hidden");
+
+  document.getElementById("saleResult")
+    .scrollIntoView({ behavior: "smooth" });
+}
+
+document.getElementById("newSaleBtn")
+  .onclick = resetSale;
+
+function resetSale() {
+  window.ticketState.selectedBooks = [];
+  window.ticketState.foundBook = null;
+
+  document.getElementById("ticketNumber").value = "";
+  document.getElementById("customerName").value = "";
+  document.getElementById("customerPhone").value = "";
+  document.getElementById("customerRemark").value = "";
+  document.getElementById("paidAmount").value = "";
+  document.getElementById("paymentMethod").value = "";
+
+  document.querySelector(
+    'input[name="paymentStatus"][value="UNPAID"]'
+  ).checked = true;
+
+  document.getElementById("selectedSection")
+    .classList.add("hidden");
+
+  document.getElementById("customerSection")
+    .classList.add("hidden");
+
+  document.getElementById("previewSection")
+    .classList.add("hidden");
+
+  document.getElementById("saleResult")
+    .classList.add("hidden");
+
+  renderSelectedBooks();
+  updateSummary();
+  updatePaymentUI();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
 }
