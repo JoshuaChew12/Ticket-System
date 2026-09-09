@@ -1,40 +1,39 @@
+// =====================================================
+// API CONFIG
+// =====================================================
+
 const API_URL =
   "https://script.google.com/macros/s/AKfycbwekrB8oFNYxApSknKPjSvkAN99tm8lg2eOKf4jKwO8GaTWswk0zltiAPq_bpeCY0M8Cg/exec";
 
-async function apiGet(action, params = {}) {
-  const query = new URLSearchParams();
-  query.set("action", action);
 
-  Object.keys(params).forEach(key => {
-    if (
-      params[key] !== undefined &&
-      params[key] !== null &&
-      params[key] !== ""
-    ) {
-      query.set(key, params[key]);
-    }
-  });
+// =====================================================
+// GET API
+// =====================================================
 
-  const response =
-    await fetch(API_URL + "?" + query);
+async function apiGet(
+  action,
+  params = {}
+) {
 
-  if (!response.ok) {
-    throw new Error(
-      "API request failed: " +
-      response.status
-    );
-  }
+  const query =
+    new URLSearchParams();
 
-  const data = await response.json();
 
-  if (data && data.success === false) {
-    throw new Error(
-      data.error || "API error."
-    );
-  }
+  query.set(
+    "action",
+    action
+  );
 
-  return data;
-}
+
+  Object.keys(params)
+    .forEach(key => {
+
+      const value =
+        params[key];
+
+
+      if (
+        value !== undefined &&
         value !== null &&
         value !== ""
       ) {
