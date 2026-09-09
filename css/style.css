@@ -419,3 +419,76 @@ textarea.form-input {
   border: 1px solid #d1d5db;
   border-radius: 12px;
 }
+
+/* =====================================
+   SALE RESULT
+===================================== */
+#saleResult{
+  margin-top:20px;
+}
+
+.success-message{
+  text-align:center;
+  font-size:18px;
+  font-weight:700;
+  padding:16px;
+  margin-bottom:14px;
+  border-radius:16px;
+  background:#ecfdf5;
+  color:#047857;
+}
+
+.sale-result-card{
+  display:grid;
+  gap:1px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#e5e7eb;
+  border:1px solid #e5e7eb;
+}
+
+.sale-result-card > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:14px 16px;
+  background:#fff;
+}
+
+.sale-result-card span{
+  font-size:14px;
+  color:#6b7280;
+}
+
+.sale-result-card strong{
+  font-size:15px;
+  color:#111827;
+  text-align:right;
+  word-break:break-word;
+}
+
+#resultSaleId{
+  font-family:monospace;
+  font-size:14px;
+}
+
+#resultTotal{
+  font-size:18px;
+}
+
+#resultBalance{
+  font-size:18px;
+}
+
+#resultPaymentStatus{
+  padding:5px 10px;
+  border-radius:999px;
+  background:#f3f4f6;
+  font-size:12px;
+}
+
+#newSaleBtn{
+  width:100%;
+  margin-top:16px;
+}
