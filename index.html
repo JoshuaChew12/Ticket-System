@@ -90,6 +90,101 @@
      ></textarea>
 
     </section>
+
+<section id="previewSection" class="card hidden">
+
+  <h2>Sale Preview</h2>
+
+  <div id="previewCustomer"></div>
+  <div id="previewBooks"></div>
+
+  <div class="preview-total">
+    <span>Total Books</span>
+    <strong id="previewBookCount">0</strong>
+
+    <span>Total Tickets</span>
+    <strong id="previewTicketCount">0</strong>
+
+    <span>Total Amount</span>
+    <strong id="previewAmount">RM0</strong>
+  </div>
+
+  <h3>Payment Status</h3>
+
+  <div class="payment-options">
+
+    <label>
+      <input
+        type="radio"
+        name="paymentStatus"
+        value="UNPAID"
+        checked
+      >
+      Unpaid
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="paymentStatus"
+        value="PARTIAL"
+      >
+      Partial
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="paymentStatus"
+        value="PAID"
+      >
+      Paid
+    </label>
+
+  </div>
+
+  <div id="paidAmountBox" class="hidden">
+
+    <label>Paid Amount</label>
+
+    <input
+      id="paidAmount"
+      class="form-input"
+      type="number"
+      min="0"
+      step="0.01"
+      placeholder="Enter paid amount"
+    >
+
+  </div>
+
+  <div id="paymentMethodBox" class="hidden">
+
+    <label>Payment Method</label>
+
+    <select
+      id="paymentMethod"
+      class="form-input"
+    >
+      <option value="">Select method</option>
+      <option value="CASH">Cash</option>
+      <option value="BANK_TRANSFER">
+        Bank Transfer
+      </option>
+      <option value="QR">QR Payment</option>
+      <option value="OTHER">Other</option>
+    </select>
+
+  </div>
+
+  <button
+    id="createSaleBtn"
+    class="primary-button"
+  >
+    Create Sale
+  </button>
+
+</section>    
     
   </main>
 
