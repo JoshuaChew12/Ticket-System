@@ -57,6 +57,23 @@ async function initApp() {
 
   document.getElementById("createSaleBtn")
   .onclick = submitSale;
+
+document.getElementById(
+  "saleSearchBtn"
+).onclick = runSaleSearch;  
+
+ document.getElementById(
+  "saleSearchInput"
+).addEventListener(
+  "keydown",
+  e => {
+
+    if (e.key === "Enter") {
+      runSaleSearch();
+    }
+
+  }
+); 
 }
 
 function continueSale() {
