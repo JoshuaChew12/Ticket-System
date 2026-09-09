@@ -41,6 +41,19 @@ async function initApp() {
   document.getElementById(
     "continueBtn"
   ).onclick = continueSale;
+
+  document
+  .querySelectorAll(
+    'input[name="paymentStatus"]'
+  )
+  .forEach(input => {
+
+    input.addEventListener(
+      "change",
+      updatePaymentUI
+    );
+
+  });
 }
 
 function continueSale() {
@@ -65,30 +78,147 @@ function continueSale() {
     return;
   }
 
-  const saleData = {
+  renderPreview();
 
-    name: name,
+  document.getElementById(
+    "previewSection"
+  ).classList.remove("hidden");
 
-    phone: phone,
+  document.getElementById(
+    "previewSection"
+  ).scrollIntoView({
+    behavior: "smooth"
+  });
+}
 
-    remark:
-      document.getElementById(
-        "customerRemark"
-      ).value.trim(),
+function renderPreview() {
 
-    books:
+  const name =
+    document.getElementById(
+      "customerName"
+    ).value.trim();
+
+  const phone =
+    document.getElementById(
+      "customerPhone"
+    ).value.trim();
+
+  const remark =
+    document.getElementById(
+      "customerRemark"
+    ).value.trim();
+
+  const books =
+    window.ticketState.selectedBooks;
+
+  const amount =
+    books.reduce((sum, book) => {
+
+      const p =
+        getPricing(book.type);
+
+      return sum +
+        Number(
+          p ? p.pricePerBook : 0
+        );
+
+    }, 0);
+
+  document.getElementById(
+    "previewCustomer"
+  ).innerHTML = `
+    <div class="preview-customer">
+      <strong>${escapeHtml(name)}</strong>
+      <span>${escapeHtml(phone)}</span>
+      ${
+        remark
+          ? `<small>${escapeHtml(remark)}</small>`
+          : ""
+      }
+    </div>
+  `;
+
+  document.getElementById(
+    "previewBooks"
+  ).innerHTML =
+    books.map(book => `
+      <div class="preview-book">
+        <strong>${book.bookId}</strong>
+        <span>
+          ${book.startNo} – ${book.endNo}
+        </span>
+        <b>
+          RM${Number(
+            getPricing(book.type)
+              .pricePerBook
+          ).toLocaleString()}
+        </b>
+      </div>
+    `).join("");
+
+  document.getElementById(
+    "previewBookCount"
+  ).textContent =
+    books.length;
+
+  document.getElementById(
+    "previewTicketCount"
+  ).textContent =
+    books.length * 10;
+
+  document.getElementById(
+    "previewAmount"
+  ).textContent =
+    "RM" + amount.toLocaleString();
+}
+
+function updatePaymentUI() {
+
+  const status =
+    document.querySelector(
+      'input[name="paymentStatus"]:checked'
+    ).value;
+
+  const paidBox =
+    document.getElementById(
+      "paidAmountBox"
+    );
+
+  const methodBox =
+    document.getElementById(
+      "paymentMethodBox"
+    );
+
+  paidBox.classList.toggle(
+    "hidden",
+    status === "UNPAID"
+  );
+
+  methodBox.classList.toggle(
+    "hidden",
+    status === "UNPAID"
+  );
+
+  if (status === "PAID") {
+
+    const amount =
       window.ticketState.selectedBooks
+        .reduce((sum, book) => {
 
-  };
+          const p =
+            getPricing(book.type);
 
-  console.log(
-    "Sale data:",
-    saleData
-  );
+          return sum +
+            Number(
+              p ? p.pricePerBook : 0
+            );
 
-  alert(
-    "Customer information completed."
-  );
+        }, 0);
+
+    document.getElementById(
+      "paidAmount"
+    ).value = amount;
+  }
 }
 
 document.addEventListener(
