@@ -63,6 +63,61 @@
 
   <div id="saleDetail"></div>
 
+  <div id="paymentSection" class="hidden">
+
+  <h3>Record Payment</h3>
+
+  <label>Amount</label>
+
+  <input
+    id="paymentAmount"
+    class="form-input"
+    type="number"
+    min="0"
+    step="0.01"
+    placeholder="Enter payment amount"
+  >
+
+  <label>Payment Method</label>
+
+  <select
+    id="paymentMethod"
+    class="form-input"
+  >
+    <option value="">Select method</option>
+    <option value="CASH">Cash</option>
+    <option value="BANK_TRANSFER">Bank Transfer</option>
+    <option value="QR">QR Payment</option>
+    <option value="OTHER">Other</option>
+  </select>
+
+  <label>Reference</label>
+
+  <input
+    id="paymentReference"
+    class="form-input"
+    type="text"
+    placeholder="Optional"
+  >
+
+  <label>Remark</label>
+
+  <textarea
+    id="paymentRemark"
+    class="form-input"
+    rows="2"
+    placeholder="Optional"
+  ></textarea>
+
+  <button
+    id="recordPaymentBtn"
+    class="primary-button"
+  >
+    Record Payment
+  </button>
+
+  </div>
+  
   <button
     id="backToSaleSearchBtn"
     class="secondary-button"
