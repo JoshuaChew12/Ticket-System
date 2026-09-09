@@ -2,524 +2,342 @@
   box-sizing: border-box;
 }
 
-
 body {
-
   margin: 0;
-
   font-family:
     -apple-system,
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-
   background: #f5f7f8;
-
   color: #111827;
-
 }
-
 
 #app {
-
   min-height: 100vh;
-
   padding-bottom: 150px;
-
 }
-
 
 /* =====================================
    HEADER
 ===================================== */
-
 .app-header {
-
   background: white;
-
   padding:
     22px
     20px
     18px;
-
   border-bottom:
     1px solid #e5e7eb;
-
 }
-
 
 .app-header h1 {
-
   margin: 0;
-
   font-size: 24px;
-
 }
 
-
 .app-header p {
-
   margin:
     4px
     0
     0;
-
   color: #6b7280;
-
   font-size: 14px;
-
 }
-
 
 /* =====================================
    CONTENT
 ===================================== */
-
 .app-content {
-
   width: 100%;
-
   max-width: 700px;
-
   margin: auto;
-
   padding: 18px;
-
 }
 
-
 .card {
-
   background: white;
-
   border-radius: 18px;
-
   padding: 18px;
-
   margin-bottom: 16px;
-
   box-shadow:
     0 4px 16px
     rgba(0,0,0,.05);
-
 }
 
-
 .card h2 {
-
   margin:
     0
     0
     14px;
-
   font-size: 18px;
-
 }
-
 
 .hidden {
-
   display: none !important;
-
 }
-
 
 /* =====================================
    STATUS
 ===================================== */
-
 .status {
-
   padding: 12px 14px;
-
   border-radius: 12px;
-
   background: #f3f4f6;
-
   color: #374151;
-
   font-size: 14px;
-
 }
-
 
 /* =====================================
    TICKET TYPES
 ===================================== */
-
 .ticket-types {
-
   display: grid;
-
   gap: 12px;
-
 }
-
 
 .ticket-type {
-
   border:
     1px solid #e5e7eb;
-
   border-radius: 16px;
-
   padding: 16px;
-
   cursor: pointer;
-
   transition:
     .15s ease;
-
 }
 
-
 .ticket-type:hover {
-
   transform:
     translateY(-1px);
-
   box-shadow:
     0 5px 16px
     rgba(0,0,0,.08);
-
 }
-
 
 .ticket-type.active {
-
   border-color:
     #111827;
-
   background:
     #f9fafb;
-
 }
-
 
 .ticket-type-name {
-
   font-size: 17px;
-
   font-weight: 700;
-
 }
-
 
 .ticket-type-price {
-
   margin-top: 7px;
-
   font-size: 14px;
-
   color: #374151;
-
 }
-
 
 .ticket-type-books {
-
   margin-top: 5px;
-
   font-size: 13px;
-
   color: #6b7280;
-
 }
-
 
 /* =====================================
    SECTION HEADER
 ===================================== */
-
 .section-header {
-
   display: flex;
-
   justify-content:
     space-between;
-
   align-items:
     center;
-
 }
 
-
 .section-subtitle {
-
   margin:
     -8px
     0
     14px;
-
   color: #6b7280;
-
   font-size: 13px;
-
 }
-
 
 /* =====================================
    BOOK LIST
 ===================================== */
-
 .book-list {
-
   display: grid;
-
   grid-template-columns:
     repeat(4, 1fr);
-
   gap: 10px;
-
 }
-
 
 .book-button {
-
   min-height: 48px;
-
   border:
     1px solid #d1d5db;
-
   background: white;
-
   border-radius: 12px;
-
   font-size: 14px;
-
   font-weight: 600;
-
   cursor: pointer;
-
   transition:
     .15s ease;
-
 }
-
 
 .book-button:hover {
-
   background: #f9fafb;
-
 }
-
 
 .book-button.selected {
-
   background: #111827;
-
   color: white;
-
-  border-color:
-    #111827;
-
+  border-color: #111827;
 }
-
 
 .book-button.disabled {
-
   opacity: .45;
-
   cursor: not-allowed;
-
 }
-
-
-/* =====================================
-   SELECTED BOOKS
-===================================== */
-
-.selected-books {
-
-  display: flex;
-
-  flex-wrap: wrap;
-
-  gap: 8px;
-
-}
-
-
-.selected-book {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: 7px;
-
-  padding:
-    8px
-    11px;
-
-  background: #f3f4f6;
-
-  border-radius: 10px;
-
-  font-size: 14px;
-
-  font-weight: 600;
-
-}
-
-
-.selected-book-remove {
-
-  border: none;
-
-  background: transparent;
-
-  padding: 0;
-
-  cursor: pointer;
-
-  font-size: 16px;
-
-  line-height: 1;
-
-}
-
-
-/* =====================================
-   BOTTOM SUMMARY
-===================================== */
-
-.selection-summary {
-
-  position: fixed;
-
-  left: 0;
-
-  right: 0;
-
-  bottom: 0;
-
-  background: white;
-
-  border-top:
-    1px solid #e5e7eb;
-
-  box-shadow:
-    0 -5px 20px
-    rgba(0,0,0,.08);
-
-  padding:
-    14px
-    18px;
-
-  z-index: 100;
-
-}
-
-
-.summary-content {
-
-  width: 100%;
-
-  max-width: 700px;
-
-  margin: auto;
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr 1.2fr;
-
-  gap: 10px;
-
-  margin-bottom: 12px;
-
-}
-
-
-.summary-stat {
-
-  display: flex;
-
-  flex-direction: column;
-
-}
-
-
-.summary-stat span {
-
-  font-size: 12px;
-
-  color: #6b7280;
-
-}
-
-
-.summary-stat strong {
-
-  margin-top: 3px;
-
-  font-size: 17px;
-
-}
-
-
-.primary-button {
-
-  width: 100%;
-
-  max-width: 700px;
-
-  display: block;
-
-  margin: auto;
-
-  border: none;
-
-  border-radius: 14px;
-
-  padding: 14px;
-
-  background: #111827;
-
-  color: white;
-
-  font-size: 16px;
-
-  font-weight: 700;
-
-  cursor: pointer;
-
-}
-
-
-.primary-button:disabled {
-
-  background: #d1d5db;
-
-  cursor: not-allowed;
-
-}
-
 
 /* =====================================
    MOBILE
 ===================================== */
-
 @media (max-width: 500px) {
 
   .book-list {
-
     grid-template-columns:
       repeat(3, 1fr);
-
   }
 
 }
 
-
 @media (max-width: 360px) {
 
   .book-list {
-
     grid-template-columns:
       repeat(2, 1fr);
-
   }
 
+}
+
+.ticket-input {
+  display: flex;
+  gap: 10px;
+}
+
+.ticket-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  font-size: 16px;
+}
+
+.ticket-input button,
+.found-book button {
+  border: none;
+  border-radius: 12px;
+  padding: 0 18px;
+  background: #111827;
+  color: white;
+  font-weight: 600;
+}
+
+.ticket-result {
+  margin-top: 12px;
+}
+
+.found-book {
+  display: grid;
+  gap: 6px;
+  padding: 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+}
+
+.found-book strong {
+  font-size: 20px;
+}
+
+.found-book span {
+  color: #374151;
+}
+
+.found-book small {
+  color: #6b7280;
+}
+
+.found-book button {
+  margin-top: 8px;
+  padding: 12px;
+}
+
+.selected-book {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px;
+  margin-bottom: 9px;
+  background: #f3f4f6;
+  border-radius: 12px;
+}
+
+.selected-book small {
+  display: block;
+  margin-top: 4px;
+  color: #6b7280;
+}
+
+.selected-book button {
+  border: none;
+  background: transparent;
+  font-size: 22px;
+}
+
+.selection-summary {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  padding: 14px 18px;
+  border-top: 1px solid #e5e7eb;
+  box-shadow: 0 -5px 20px rgba(0,0,0,.08);
+}
+
+.summary-content {
+  max-width: 700px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.3fr;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.summary-content div {
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-content small {
+  color: #6b7280;
+}
+
+.summary-content strong {
+  font-size: 18px;
+}
+
+.primary-button {
+  width: 100%;
+  max-width: 700px;
+  display: block;
+  margin: auto;
+  padding: 14px;
+  border: none;
+  border-radius: 14px;
+  background: #111827;
+  color: white;
+  font-weight: 700;
+}
+
+.primary-button:disabled {
+  background: #d1d5db;
 }
