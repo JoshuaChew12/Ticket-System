@@ -355,3 +355,369 @@ function resetSale() {
     behavior: "smooth"
   });
 }
+
+async function searchSales(keyword) {
+
+  return apiGet("searchSales", {
+    keyword: keyword
+  });
+
+}
+
+async function runSaleSearch() {
+
+  const input =
+    document.getElementById(
+      "saleSearchInput"
+    );
+
+  const status =
+    document.getElementById(
+      "saleSearchStatus"
+    );
+
+  const results =
+    document.getElementById(
+      "saleSearchResults"
+    );
+
+  const keyword =
+    input.value.trim();
+
+  if (!keyword) {
+
+    status.innerHTML =
+      `<div class="status">
+        Enter a search keyword.
+      </div>`;
+
+    results.innerHTML = "";
+
+    return;
+  }
+
+  try {
+
+    status.innerHTML =
+      `<div class="status">
+        Searching...
+      </div>`;
+
+    results.innerHTML = "";
+
+    const response =
+      await searchSales(keyword);
+
+    const sales =
+      response.data || [];
+
+    if (!sales.length) {
+
+      status.innerHTML =
+        `<div class="status">
+          No sales found.
+        </div>`;
+
+      return;
+    }
+
+    status.innerHTML =
+      `<div class="status">
+        ${sales.length} sale(s) found.
+      </div>`;
+
+    renderSaleSearchResults(sales);
+
+  } catch (error) {
+
+    status.innerHTML =
+      `<div class="status">
+        ${escapeHtml(error.message)}
+      </div>`;
+
+  }
+
+}
+
+function renderSaleSearchResults(sales) {
+
+  const box =
+    document.getElementById(
+      "saleSearchResults"
+    );
+
+  box.innerHTML =
+    sales.map(sale => `
+
+      <button
+        class="sale-search-item"
+        onclick="openSaleDetail('${escapeHtml(sale.saleId)}')"
+      >
+
+        <div>
+
+          <strong>
+            ${escapeHtml(sale.saleId)}
+          </strong>
+
+          <span>
+            ${escapeHtml(sale.name)}
+          </span>
+
+          <small>
+            ${escapeHtml(sale.phone)}
+          </small>
+
+        </div>
+
+        <div>
+
+          <b>
+            RM${Number(
+              sale.totalAmount
+            ).toLocaleString()}
+          </b>
+
+          <small>
+            ${escapeHtml(
+              sale.paymentStatus
+            )}
+          </small>
+
+        </div>
+
+      </button>
+
+    `).join("");
+
+}
+
+async function openSaleDetail(saleId) {
+
+  try {
+
+    const response =
+      await apiGet("getSale", {
+        saleId: saleId
+      });
+
+    renderSaleDetail(response);
+
+  } catch (error) {
+
+    alert(error.message);
+
+  }
+
+}
+
+function renderSaleDetail(result) {
+
+  const sale = result.sale;
+  const items = result.items || [];
+  const payments = result.payments || [];
+
+  const box =
+    document.getElementById(
+      "saleDetail"
+    );
+
+  box.innerHTML = `
+
+    <div class="sale-detail-header">
+
+      <span>Sale ID</span>
+
+      <strong>
+        ${escapeHtml(sale.saleId)}
+      </strong>
+
+    </div>
+
+
+    <div class="sale-detail-customer">
+
+      <strong>
+        ${escapeHtml(sale.name)}
+      </strong>
+
+      <span>
+        ${escapeHtml(sale.phone)}
+      </span>
+
+      ${
+        sale.remark
+          ? `<small>
+              ${escapeHtml(sale.remark)}
+            </small>`
+          : ""
+      }
+
+    </div>
+
+
+    <div class="sale-detail-books">
+
+      ${items.map(item => `
+
+        <div class="sale-detail-book">
+
+          <div>
+
+            <strong>
+              ${escapeHtml(item.bookId)}
+            </strong>
+
+            <span>
+              ${escapeHtml(item.typeName)}
+            </span>
+
+          </div>
+
+          <div>
+
+            <span>
+              ${item.startNo} – ${item.endNo}
+            </span>
+
+            <small>
+              ${escapeHtml(item.status)}
+            </small>
+
+          </div>
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+
+    <div class="sale-detail-total">
+
+      <div>
+        <span>Total Books</span>
+        <strong>
+          ${sale.totalBooks}
+        </strong>
+      </div>
+
+      <div>
+        <span>Total Tickets</span>
+        <strong>
+          ${sale.totalTickets}
+        </strong>
+      </div>
+
+      <div>
+        <span>Total</span>
+        <strong>
+          RM${Number(
+            sale.totalAmount
+          ).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Paid</span>
+        <strong>
+          RM${Number(
+            sale.paidAmount
+          ).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Balance</span>
+        <strong>
+          RM${Number(
+            sale.balance
+          ).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Status</span>
+        <strong>
+          ${escapeHtml(
+            sale.paymentStatus
+          )}
+        </strong>
+      </div>
+
+    </div>
+
+
+    ${
+      payments.length
+        ? `
+
+          <div class="sale-detail-payments">
+
+            <h3>Payments</h3>
+
+            ${payments.map(payment => `
+
+              <div class="payment-row">
+
+                <div>
+
+                  <strong>
+                    RM${Number(
+                      payment.amount
+                    ).toLocaleString()}
+                  </strong>
+
+                  <span>
+                    ${escapeHtml(
+                      payment.paymentMethod || ""
+                    )}
+                  </span>
+
+                </div>
+
+                ${
+                  payment.reference
+                    ? `<small>
+                        ${escapeHtml(
+                          payment.reference
+                        )}
+                      </small>`
+                    : ""
+                }
+
+              </div>
+
+            `).join("")}
+
+          </div>
+
+        `
+        : ""
+    }
+
+  `;
+
+  document.getElementById(
+    "searchSection"
+  ).classList.add("hidden");
+
+  document.getElementById(
+    "saleDetailSection"
+  ).classList.remove("hidden");
+
+}
+
+document.getElementById(
+  "backToSaleSearchBtn"
+).onclick = function() {
+
+  document.getElementById(
+    "saleDetailSection"
+  ).classList.add("hidden");
+
+  document.getElementById(
+    "searchSection"
+  ).classList.remove("hidden");
+
+};
