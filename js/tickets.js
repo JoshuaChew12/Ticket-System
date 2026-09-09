@@ -13,25 +13,32 @@ async function findBook(ticketNo){
 }
 
 function getPricing(type){
-  return window.ticketState.pricing.find(x=>x.type===type);
+  return window.ticketState.pricing.find(
+    x=>x.type===type
+  );
 }
 
 async function searchTicket(){
 
   const input=document.getElementById("ticketNumber");
   const result=document.getElementById("ticketResult");
+
+  if(!input||!result)return;
+
   const ticketNo=Number(input.value);
 
   if(!ticketNo){
     result.classList.remove("hidden");
-    result.innerHTML='<div class="status">Enter a ticket number.</div>';
+    result.innerHTML=
+      '<div class="status">Enter a ticket number.</div>';
     return;
   }
 
   try{
 
     result.classList.remove("hidden");
-    result.innerHTML='<div class="status">Searching...</div>';
+    result.innerHTML=
+      '<div class="status">Searching...</div>';
 
     const book=(await findBook(ticketNo)).data;
 
@@ -39,17 +46,38 @@ async function searchTicket(){
 
     result.innerHTML=`
       <div class="found-book">
+
         <strong>${escapeHtml(book.bookId)}</strong>
-        <span>${escapeHtml(book.typeName)}</span>
-        <small>Ticket ${book.startNo} – ${book.endNo}</small>
-        <button onclick="addFoundBook()">Add Book</button>
+
+        <span>
+          ${escapeHtml(book.typeName)}
+        </span>
+
+        <small>
+          Ticket ${book.startNo} – ${book.endNo}
+        </small>
+
+        <button id="addFoundBookBtn">
+          Add Book
+        </button>
+
       </div>`;
+
+    const addBtn=
+      document.getElementById("addFoundBookBtn");
+
+    if(addBtn){
+      addBtn.onclick=addFoundBook;
+    }
 
   }catch(error){
 
     window.ticketState.foundBook=null;
+
     result.innerHTML=
-      `<div class="status">${escapeHtml(error.message)}</div>`;
+      `<div class="status">
+        ${escapeHtml(error.message)}
+      </div>`;
   }
 }
 
@@ -59,13 +87,28 @@ function addFoundBook(){
 
   if(!book)return;
 
-  if(window.ticketState.selectedBooks
-    .some(x=>x.bookId===book.bookId))return;
+  if(
+    window.ticketState.selectedBooks
+      .some(x=>x.bookId===book.bookId)
+  ){
+    return;
+  }
 
   window.ticketState.selectedBooks.push(book);
 
-  document.getElementById("ticketNumber").value="";
-  document.getElementById("ticketResult").classList.add("hidden");
+  const ticketInput=
+    document.getElementById("ticketNumber");
+
+  const ticketResult=
+    document.getElementById("ticketResult");
+
+  if(ticketInput){
+    ticketInput.value="";
+  }
+
+  if(ticketResult){
+    ticketResult.classList.add("hidden");
+  }
 
   renderSelectedBooks();
   updateSummary();
@@ -75,47 +118,78 @@ function addFoundBook(){
 function removeBook(bookId){
 
   window.ticketState.selectedBooks=
-    window.ticketState.selectedBooks
-      .filter(x=>x.bookId!==bookId);
+    window.ticketState.selectedBooks.filter(
+      x=>x.bookId!==bookId
+    );
 
   renderSelectedBooks();
   updateSummary();
 
+  const preview=
+    document.getElementById("previewSection");
+
+  if(preview){
+    preview.classList.add("hidden");
+  }
+
   if(!window.ticketState.selectedBooks.length){
 
-    document.getElementById("customerSection")
-      .classList.add("hidden");
+    const customer=
+      document.getElementById("customerSection");
 
-    document.getElementById("previewSection")
-      .classList.add("hidden");
+    if(customer){
+      customer.classList.add("hidden");
+    }
   }
 }
 
 function showCustomerSection(){
-  document.getElementById("customerSection")
-    .classList.remove("hidden");
+
+  const section=
+    document.getElementById("customerSection");
+
+  if(section){
+    section.classList.remove("hidden");
+  }
 }
 
 function renderSelectedBooks(){
 
-  const books=window.ticketState.selectedBooks;
+  const books=
+    window.ticketState.selectedBooks;
 
-  document.getElementById("selectedSection")
-    .classList.toggle("hidden",!books.length);
+  const section=
+    document.getElementById("selectedSection");
 
-  document.getElementById("selectedBooks").innerHTML=
+  const box=
+    document.getElementById("selectedBooks");
+
+  if(!section||!box)return;
+
+  section.classList.toggle(
+    "hidden",
+    !books.length
+  );
+
+  box.innerHTML=
     books.map(book=>`
       <div class="selected-book">
 
         <div>
-          <strong>${escapeHtml(book.bookId)}</strong>
+
+          <strong>
+            ${escapeHtml(book.bookId)}
+          </strong>
+
           <small>
             ${escapeHtml(book.typeName)}<br>
             ${book.startNo} – ${book.endNo}
           </small>
+
         </div>
 
-        <button onclick="removeBook('${escapeHtml(book.bookId)}')">
+        <button
+          onclick="removeBook('${escapeHtml(book.bookId)}')">
           ×
         </button>
 
@@ -127,8 +201,12 @@ function calculateSaleTotal(){
 
   return window.ticketState.selectedBooks.reduce(
     (sum,book)=>{
+
       const p=getPricing(book.type);
-      return sum+Number(p?.pricePerBook||0);
+
+      return sum+
+        Number(p?.pricePerBook||0);
+
     },
     0
   );
@@ -136,29 +214,69 @@ function calculateSaleTotal(){
 
 function updateSummary(){
 
-  const books=window.ticketState.selectedBooks;
-  const amount=calculateSaleTotal();
+  const books=
+    window.ticketState.selectedBooks;
 
-  document.getElementById("selectedBookCount").textContent=
-    books.length;
+  const amount=
+    calculateSaleTotal();
 
-  document.getElementById("selectedTicketCount").textContent=
+  const bookCount=
+    document.getElementById("selectedBookCount");
+
+  const ticketCount=
+    document.getElementById("selectedTicketCount");
+
+  const totalAmount=
+    document.getElementById("selectedTotalAmount");
+
+  const summary=
+    document.getElementById("selectionSummary");
+
+  const continueBtn=
+    document.getElementById("continueBtn");
+
+  if(
+    !bookCount||
+    !ticketCount||
+    !totalAmount||
+    !summary||
+    !continueBtn
+  ){
+    return;
+  }
+
+  bookCount.textContent=books.length;
+
+  ticketCount.textContent=
     books.length*10;
 
-  document.getElementById("selectedTotalAmount").textContent=
+  totalAmount.textContent=
     "RM"+amount.toLocaleString();
 
-  document.getElementById("selectionSummary")
-    .classList.toggle("hidden",!books.length);
+  summary.classList.toggle(
+    "hidden",
+    !books.length
+  );
 
-  document.getElementById("continueBtn").disabled=
+  continueBtn.disabled=
     !books.length;
 }
 
 function continueSale(){
 
-  const name=document.getElementById("customerName").value.trim();
-  const phone=document.getElementById("customerPhone").value.trim();
+  const nameElement=
+    document.getElementById("customerName");
+
+  const phoneElement=
+    document.getElementById("customerPhone");
+
+  if(!nameElement||!phoneElement)return;
+
+  const name=
+    nameElement.value.trim();
+
+  const phone=
+    phoneElement.value.trim();
 
   if(!name){
     alert("Name is required.");
@@ -172,42 +290,83 @@ function continueSale(){
 
   renderPreview();
 
-  document.getElementById("previewSection")
-    .classList.remove("hidden");
+  const preview=
+    document.getElementById("previewSection");
 
-  document.getElementById("previewSection")
-    .scrollIntoView({behavior:"smooth"});
+  const summary=
+    document.getElementById("selectionSummary");
+
+  if(preview){
+    preview.classList.remove("hidden");
+
+    preview.scrollIntoView({
+      behavior:"smooth"
+    });
+  }
+
+  if(summary){
+    summary.classList.add("hidden");
+  }
 }
 
 function renderPreview(){
 
-  const books=window.ticketState.selectedBooks;
-  const name=document.getElementById("customerName").value.trim();
-  const phone=document.getElementById("customerPhone").value.trim();
-  const amount=calculateSaleTotal();
+  const books=
+    window.ticketState.selectedBooks;
 
-  document.getElementById("previewCustomer").innerHTML=`
-    <div><strong>${escapeHtml(name)}</strong></div>
-    <div>${escapeHtml(phone)}</div>`;
+  const name=
+    document.getElementById("customerName")
+      .value.trim();
 
-  document.getElementById("previewBooks").innerHTML=
+  const phone=
+    document.getElementById("customerPhone")
+      .value.trim();
+
+  const amount=
+    calculateSaleTotal();
+
+  document.getElementById(
+    "previewCustomer"
+  ).innerHTML=`
+    <div>
+      <strong>${escapeHtml(name)}</strong>
+    </div>
+
+    <div>
+      ${escapeHtml(phone)}
+    </div>
+  `;
+
+  document.getElementById(
+    "previewBooks"
+  ).innerHTML=
     books.map(book=>`
       <div class="preview-book">
-        <strong>${escapeHtml(book.bookId)}</strong>
+
+        <strong>
+          ${escapeHtml(book.bookId)}
+        </strong>
+
         <span>
           ${escapeHtml(book.typeName)} ·
           ${book.startNo} – ${book.endNo}
         </span>
+
       </div>
     `).join("");
 
-  document.getElementById("previewBookCount").textContent=
-    books.length;
+  document.getElementById(
+    "previewBookCount"
+  ).textContent=books.length;
 
-  document.getElementById("previewTicketCount").textContent=
+  document.getElementById(
+    "previewTicketCount"
+  ).textContent=
     books.length*10;
 
-  document.getElementById("previewAmount").textContent=
+  document.getElementById(
+    "previewAmount"
+  ).textContent=
     "RM"+amount.toLocaleString();
 
   updatePaymentUI();
@@ -215,25 +374,49 @@ function renderPreview(){
 
 function updatePaymentUI(){
 
-  const status=document.querySelector(
-    'input[name="paymentStatus"]:checked'
-  ).value;
+  const selected=
+    document.querySelector(
+      'input[name="paymentStatus"]:checked'
+    );
 
-  const paidBox=document.getElementById("paidAmountBox");
-  const methodBox=document.getElementById("paymentMethodBox");
+  if(!selected)return;
 
-  paidBox.classList.toggle("hidden",status==="UNPAID");
-  methodBox.classList.toggle("hidden",status==="UNPAID");
+  const status=selected.value;
+
+  const paidBox=
+    document.getElementById("paidAmountBox");
+
+  const methodBox=
+    document.getElementById("paymentMethodBox");
+
+  if(!paidBox||!methodBox)return;
+
+  paidBox.classList.toggle(
+    "hidden",
+    status==="UNPAID"
+  );
+
+  methodBox.classList.toggle(
+    "hidden",
+    status==="UNPAID"
+  );
 
   if(status==="PAID"){
-    document.getElementById("paidAmount").value=
-      calculateSaleTotal();
+
+    const paidAmount=
+      document.getElementById("paidAmount");
+
+    if(paidAmount){
+      paidAmount.value=
+        calculateSaleTotal();
+    }
   }
 }
 
 async function submitSale(){
 
-  const books=window.ticketState.selectedBooks;
+  const books=
+    window.ticketState.selectedBooks;
 
   if(!books.length){
     alert("Please select at least one book.");
@@ -241,31 +424,51 @@ async function submitSale(){
   }
 
   const data={
-    name:document.getElementById("customerName").value.trim(),
-    phone:document.getElementById("customerPhone").value.trim(),
-    remark:document.getElementById("customerRemark").value.trim(),
-    paymentStatus:document.querySelector(
-      'input[name="paymentStatus"]:checked'
-    ).value,
+    name:
+      document.getElementById("customerName")
+        .value.trim(),
+
+    phone:
+      document.getElementById("customerPhone")
+        .value.trim(),
+
+    remark:
+      document.getElementById("customerRemark")
+        .value.trim(),
+
+    paymentStatus:
+      document.querySelector(
+        'input[name="paymentStatus"]:checked'
+      ).value,
+
     paidAmount:Number(
-      document.getElementById("paidAmount").value||0
+      document.getElementById("paidAmount")
+        .value||0
     ),
+
     paymentMethod:
-      document.getElementById("paymentMethod").value,
-    items:books.map(book=>({
-      bookId:book.bookId,
-      type:book.type
-    }))
+      document.getElementById("paymentMethod")
+        .value,
+
+    items:
+      books.map(book=>({
+        bookId:book.bookId,
+        type:book.type
+      }))
   };
 
-  const btn=document.getElementById("createSaleBtn");
+  const btn=
+    document.getElementById("createSaleBtn");
+
+  if(!btn)return;
 
   try{
 
     btn.disabled=true;
     btn.textContent="Creating...";
 
-    const result=await apiPost("createSale",data);
+    const result=
+      await apiPost("createSale",data);
 
     showSaleResult(result);
 
@@ -288,24 +491,48 @@ function showSaleResult(result){
     resultPhone:result.phone,
     resultBooks:result.totalBooks,
     resultTickets:result.totalTickets,
+
     resultTotal:
-      "RM"+Number(result.totalAmount||0).toLocaleString(),
+      "RM"+
+      Number(result.totalAmount||0)
+        .toLocaleString(),
+
     resultPaid:
-      "RM"+Number(result.paidAmount||0).toLocaleString(),
+      "RM"+
+      Number(result.paidAmount||0)
+        .toLocaleString(),
+
     resultBalance:
-      "RM"+Number(result.balance||0).toLocaleString(),
-    resultPaymentStatus:result.paymentStatus
+      "RM"+
+      Number(result.balance||0)
+        .toLocaleString(),
+
+    resultPaymentStatus:
+      result.paymentStatus
   };
 
   Object.keys(fields).forEach(id=>{
-    document.getElementById(id).textContent=fields[id];
+
+    const el=
+      document.getElementById(id);
+
+    if(el){
+      el.textContent=fields[id];
+    }
+
   });
 
-  document.getElementById("saleResult")
-    .classList.remove("hidden");
+  const resultBox=
+    document.getElementById("saleResult");
 
-  document.getElementById("saleResult")
-    .scrollIntoView({behavior:"smooth"});
+  if(resultBox){
+
+    resultBox.classList.remove("hidden");
+
+    resultBox.scrollIntoView({
+      behavior:"smooth"
+    });
+  }
 }
 
 function resetSale(){
@@ -324,12 +551,24 @@ function resetSale(){
     "paidAmount",
     "paymentMethod"
   ].forEach(id=>{
-    document.getElementById(id).value="";
+
+    const el=
+      document.getElementById(id);
+
+    if(el){
+      el.value="";
+    }
+
   });
 
-  document.querySelector(
-    'input[name="paymentStatus"][value="UNPAID"]'
-  ).checked=true;
+  const unpaid=
+    document.querySelector(
+      'input[name="paymentStatus"][value="UNPAID"]'
+    );
+
+  if(unpaid){
+    unpaid.checked=true;
+  }
 
   [
     "selectedSection",
@@ -337,14 +576,24 @@ function resetSale(){
     "previewSection",
     "saleResult"
   ].forEach(id=>{
-    document.getElementById(id).classList.add("hidden");
+
+    const el=
+      document.getElementById(id);
+
+    if(el){
+      el.classList.add("hidden");
+    }
+
   });
 
   renderSelectedBooks();
   updateSummary();
   updatePaymentUI();
 
-  window.scrollTo({top:0,behavior:"smooth"});
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
 }
 
 function escapeHtml(value){
@@ -359,22 +608,33 @@ function escapeHtml(value){
 
 async function initTickets(){
 
-  try{
+  const findBtn=
+    document.getElementById("findTicketBtn");
 
-    const response=await loadPricing();
+  const continueBtn=
+    document.getElementById("continueBtn");
 
-    window.ticketState.pricing=
-      response.data||response||[];
+  const createBtn=
+    document.getElementById("createSaleBtn");
 
-  }catch(error){
+  const newSaleBtn=
+    document.getElementById("newSaleBtn");
 
-    console.error("Pricing load failed:",error);
+  if(findBtn){
+    findBtn.onclick=searchTicket;
   }
 
-  document.getElementById("findTicketBtn").onclick=searchTicket;
-  document.getElementById("continueBtn").onclick=continueSale;
-  document.getElementById("createSaleBtn").onclick=submitSale;
-  document.getElementById("newSaleBtn").onclick=resetSale;
+  if(continueBtn){
+    continueBtn.onclick=continueSale;
+  }
+
+  if(createBtn){
+    createBtn.onclick=submitSale;
+  }
+
+  if(newSaleBtn){
+    newSaleBtn.onclick=resetSale;
+  }
 
   document.querySelectorAll(
     'input[name="paymentStatus"]'
@@ -383,4 +643,26 @@ async function initTickets(){
   });
 
   updatePaymentUI();
+
+  try{
+
+    const response=
+      await loadPricing();
+
+    if(
+      !document.getElementById("ticketNumber")
+    ){
+      return;
+    }
+
+    window.ticketState.pricing=
+      response.data||response||[];
+
+  }catch(error){
+
+    console.error(
+      "Pricing load failed:",
+      error
+    );
+  }
 }
