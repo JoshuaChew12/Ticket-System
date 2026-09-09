@@ -1,6 +1,4 @@
-window.homeState={
-  inventory:[]
-};
+window.homeState={inventory:[]};
 
 async function loadInventory(){
 
@@ -8,51 +6,32 @@ async function loadInventory(){
 
   window.homeState.inventory=result.data||result||[];
 
-  renderInventory();
-}
-
-function renderInventory(){
-
-  const data=window.homeState.inventory;
-
   const map={
     H:"honorary",
     V:"vip",
     S:"student"
   };
 
-  data.forEach(item=>{
+  window.homeState.inventory.forEach(item=>{
 
     const key=map[item.type];
+
     if(!key)return;
 
-    setInventoryValue(
-      key+"Available",
-      item.available
-    );
+    ["available","held","sold"].forEach(status=>{
+      const el=document.getElementById(
+        key+status.charAt(0).toUpperCase()+status.slice(1)
+      );
 
-    setInventoryValue(
-      key+"Held",
-      item.held
-    );
-
-    setInventoryValue(
-      key+"Sold",
-      item.sold
-    );
+      if(el){
+        el.textContent=
+          Number(item[status]||0).toLocaleString();
+      }
+    });
   });
 
   document.getElementById("systemStatus").textContent=
     "Connected";
-}
-
-function setInventoryValue(id,value){
-
-  const el=document.getElementById(id);
-
-  if(el){
-    el.textContent=Number(value||0).toLocaleString();
-  }
 }
 
 async function initHome(){
@@ -62,12 +41,8 @@ async function initHome(){
   status.textContent="Loading...";
 
   try{
-
     await loadInventory();
-
   }catch(error){
-
     status.textContent=error.message;
-
   }
 }
