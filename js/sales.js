@@ -48,23 +48,46 @@ function renderSaleSearchResults(){
 
   box.className="sale-search-results";
 
-  box.innerHTML=data.map(sale=>`
-    <button class="sale-search-item"
-      onclick="openSaleDetail('${escapeHtml(sale.saleId)}')">
+  box.innerHTML=data.map(sale=>{
 
-      <div>
-        <strong>${escapeHtml(sale.saleId)}</strong>
-        <span>${escapeHtml(sale.name||"-")}</span>
-        <small>${escapeHtml(sale.phone||"-")}</small>
-      </div>
+    const status=
+      String(sale.paymentStatus||"").toUpperCase();
 
-      <div>
-        <b>RM${Number(sale.totalAmount||0).toLocaleString()}</b>
-        <small>${escapeHtml(sale.paymentStatus||"-")}</small>
-      </div>
+    return`
 
-    </button>
-  `).join("");
+      <button class="sale-search-item"
+        onclick="openSaleDetail('${escapeHtml(sale.saleId)}')">
+
+        <div>
+
+          <strong>${escapeHtml(sale.saleId)}</strong>
+
+          <span>
+            ${escapeHtml(sale.name||"-")}
+          </span>
+
+          <small>
+            ${escapeHtml(sale.phone||"-")}
+          </small>
+
+        </div>
+
+        <div>
+
+          <b>
+            RM${Number(sale.totalAmount||0).toLocaleString()}
+          </b>
+
+          <small class="status-badge status-${status.toLowerCase()}">
+            ${escapeHtml(status||"-")}
+          </small>
+
+        </div>
+
+      </button>
+    `;
+
+  }).join("");
 }
 
 async function openSaleDetail(saleId){
@@ -88,7 +111,9 @@ async function openSaleDetail(saleId){
 
     renderSaleDetail(result);
 
-    section.scrollIntoView({behavior:"smooth"});
+    section.scrollIntoView({
+      behavior:"smooth"
+    });
 
   }catch(error){
 
@@ -103,55 +128,115 @@ function renderSaleDetail(result){
   const items=result.items||[];
   const payments=result.payments||[];
 
+  const paymentStatus=
+    String(sale.paymentStatus||"").toUpperCase();
+
   document.getElementById("saleDetail").innerHTML=`
 
     <div class="sale-detail-header">
+
       <span>Sale ID</span>
-      <strong>${escapeHtml(sale.saleId)}</strong>
+
+      <strong>
+        ${escapeHtml(sale.saleId)}
+      </strong>
+
     </div>
 
     <div class="sale-detail-customer">
-      <strong>${escapeHtml(sale.name||"-")}</strong>
-      <span>${escapeHtml(sale.phone||"-")}</span>
+
+      <strong>
+        ${escapeHtml(sale.name||"-")}
+      </strong>
+
+      <span>
+        ${escapeHtml(sale.phone||"-")}
+      </span>
+
       ${sale.remark?
         `<small>${escapeHtml(sale.remark)}</small>`:""}
+
     </div>
 
     <div class="sale-detail-books">
 
       ${items.map(item=>`
+
         <div class="sale-detail-book">
 
           <div>
-            <strong>${escapeHtml(item.bookId)}</strong>
-            <span>${escapeHtml(item.typeName||item.type)}</span>
+
+            <strong>
+              ${escapeHtml(item.bookId)}
+            </strong>
+
+            <span>
+              ${escapeHtml(item.typeName||item.type)}
+            </span>
+
           </div>
 
           <div>
-            <span>${item.startNo} – ${item.endNo}</span>
-            <small>${escapeHtml(item.status||"-")}</small>
+
+            <span>
+              ${item.startNo} – ${item.endNo}
+            </span>
+
+            <small>
+              ${escapeHtml(item.status||"-")}
+            </small>
+
           </div>
 
         </div>
+
       `).join("")}
 
     </div>
 
     <div class="sale-detail-total">
 
-      ${[
-        ["Total Books",sale.totalBooks],
-        ["Total Tickets",sale.totalTickets],
-        ["Total Amount","RM"+Number(sale.totalAmount||0).toLocaleString()],
-        ["Paid","RM"+Number(sale.paidAmount||0).toLocaleString()],
-        ["Balance","RM"+Number(sale.balance||0).toLocaleString()],
-        ["Payment Status",sale.paymentStatus||"-"]
-      ].map(x=>`
-        <div>
-          <span>${x[0]}</span>
-          <strong>${escapeHtml(x[1])}</strong>
-        </div>
-      `).join("")}
+      <div>
+        <span>Total Books</span>
+        <strong>${sale.totalBooks}</strong>
+      </div>
+
+      <div>
+        <span>Total Tickets</span>
+        <strong>${sale.totalTickets}</strong>
+      </div>
+
+      <div>
+        <span>Total Amount</span>
+        <strong>
+          RM${Number(sale.totalAmount||0).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Paid</span>
+        <strong>
+          RM${Number(sale.paidAmount||0).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Balance</span>
+        <strong>
+          RM${Number(sale.balance||0).toLocaleString()}
+        </strong>
+      </div>
+
+      <div>
+        <span>Payment Status</span>
+
+        <strong>
+          <span class="status-badge status-${paymentStatus.toLowerCase()}">
+            ${escapeHtml(paymentStatus||"-")}
+          </span>
+        </strong>
+
+      </div>
 
     </div>
 
@@ -162,9 +247,11 @@ function renderSaleDetail(result){
       ${
         payments.length
         ?payments.map(payment=>`
+
           <div class="payment-row">
 
             <div>
+
               <strong>
                 RM${Number(payment.amount||0).toLocaleString()}
               </strong>
@@ -172,6 +259,11 @@ function renderSaleDetail(result){
               <span>
                 ${escapeHtml(payment.paymentMethod||"-")}
               </span>
+
+              <small>
+                ${formatPaymentDate(payment.paymentTime)}
+              </small>
+
             </div>
 
             <small>
@@ -179,6 +271,7 @@ function renderSaleDetail(result){
             </small>
 
           </div>
+
         `).join("")
         :'<div class="status">No payment recorded.</div>'
       }
@@ -192,25 +285,56 @@ function renderSaleDetail(result){
       Number(sale.balance||0)<=0
     );
 
-  ["paymentAmount","salePaymentMethod",
-   "paymentReference","paymentRemark"]
-    .forEach(id=>{
-      document.getElementById(id).value="";
-    });
+  [
+    "paymentAmount",
+    "salePaymentMethod",
+    "paymentReference",
+    "paymentRemark"
+  ].forEach(id=>{
+    document.getElementById(id).value="";
+  });
+}
+
+function formatPaymentDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+  const date=new Date(value);
+
+  if(isNaN(date.getTime())){
+    return escapeHtml(value);
+  }
+
+  return date.toLocaleString("en-MY",{
+    day:"numeric",
+    month:"short",
+    year:"numeric",
+    hour:"numeric",
+    minute:"2-digit",
+    hour12:true
+  });
 }
 
 async function recordSalePayment(){
 
   const saleId=window.salesState.currentSaleId;
+
   const amount=Number(
     document.getElementById("paymentAmount").value||0
   );
+
   const paymentMethod=
     document.getElementById("salePaymentMethod").value;
+
   const reference=
-    document.getElementById("paymentReference").value.trim();
+    document.getElementById("paymentReference")
+      .value.trim();
+
   const remark=
-    document.getElementById("paymentRemark").value.trim();
+    document.getElementById("paymentRemark")
+      .value.trim();
 
   if(!saleId){
     alert("Sale not selected.");
@@ -227,7 +351,8 @@ async function recordSalePayment(){
     return;
   }
 
-  const btn=document.getElementById("recordPaymentBtn");
+  const btn=
+    document.getElementById("recordPaymentBtn");
 
   try{
 
@@ -282,11 +407,20 @@ function escapeHtml(value){
 
 function initSales(){
 
-  document.getElementById("saleSearchBtn").onclick=searchSales;
-  document.getElementById("recordPaymentBtn").onclick=recordSalePayment;
-  document.getElementById("backToSaleSearchBtn").onclick=backToSaleSearch;
+  document.getElementById("saleSearchBtn").onclick=
+    searchSales;
+
+  document.getElementById("recordPaymentBtn").onclick=
+    recordSalePayment;
+
+  document.getElementById("backToSaleSearchBtn").onclick=
+    backToSaleSearch;
 
   document.getElementById("saleSearchInput").onkeydown=e=>{
-    if(e.key==="Enter")searchSales();
+
+    if(e.key==="Enter"){
+      searchSales();
+    }
+
   };
 }
