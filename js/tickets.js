@@ -269,7 +269,7 @@ async function submitSale() {
 
     alert(
       "Sale created successfully.\n\nSale ID: " +
-      result.data.saleId
+      result.saleId
     );
 
   } catch (error) {
