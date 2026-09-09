@@ -492,3 +492,274 @@ textarea.form-input {
   width:100%;
   margin-top:16px;
 }
+
+/* =====================================
+   SALE SEARCH
+===================================== */
+.search-box{
+  display:flex;
+  gap:10px;
+  margin-top:14px;
+}
+
+.search-box .form-input{
+  flex:1;
+  min-width:0;
+}
+
+.search-box .primary-button{
+  flex-shrink:0;
+  padding:0 18px;
+}
+
+.sale-search-results{
+  display:grid;
+  gap:10px;
+  margin-top:14px;
+}
+
+.sale-search-item{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  padding:15px;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  background:#fff;
+  text-align:left;
+  cursor:pointer;
+}
+
+.sale-search-item:active{
+  transform:scale(.99);
+}
+
+.sale-search-item > div:first-child{
+  display:grid;
+  gap:4px;
+  min-width:0;
+}
+
+.sale-search-item > div:last-child{
+  display:grid;
+  gap:5px;
+  text-align:right;
+  flex-shrink:0;
+}
+
+.sale-search-item strong{
+  font-size:15px;
+  color:#111827;
+  word-break:break-word;
+}
+
+.sale-search-item span{
+  font-size:14px;
+  color:#374151;
+}
+
+.sale-search-item small{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.sale-search-item b{
+  font-size:15px;
+  color:#111827;
+}
+
+
+/* =====================================
+   SALE DETAIL
+===================================== */
+#saleDetailSection{
+  margin-top:20px;
+}
+
+.sale-detail-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:16px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+.sale-detail-header span{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.sale-detail-header strong{
+  font-size:14px;
+  font-family:monospace;
+  color:#111827;
+  text-align:right;
+  word-break:break-all;
+}
+
+.sale-detail-customer{
+  display:grid;
+  gap:5px;
+  padding:16px 0;
+}
+
+.sale-detail-customer strong{
+  font-size:19px;
+  color:#111827;
+}
+
+.sale-detail-customer span{
+  font-size:14px;
+  color:#6b7280;
+}
+
+.sale-detail-customer small{
+  margin-top:4px;
+  font-size:13px;
+  color:#6b7280;
+  white-space:pre-wrap;
+}
+
+
+/* =====================================
+   BOOKS
+===================================== */
+.sale-detail-books{
+  display:grid;
+  gap:8px;
+}
+
+.sale-detail-book{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:14px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:#f9fafb;
+}
+
+.sale-detail-book > div:first-child{
+  display:grid;
+  gap:4px;
+}
+
+.sale-detail-book > div:last-child{
+  display:grid;
+  gap:4px;
+  text-align:right;
+}
+
+.sale-detail-book strong{
+  font-size:15px;
+  color:#111827;
+}
+
+.sale-detail-book span{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.sale-detail-book small{
+  font-size:11px;
+  font-weight:700;
+  color:#374151;
+}
+
+
+/* =====================================
+   TOTAL
+===================================== */
+.sale-detail-total{
+  display:grid;
+  gap:1px;
+  margin-top:16px;
+  overflow:hidden;
+  border:1px solid #e5e7eb;
+  border-radius:16px;
+  background:#e5e7eb;
+}
+
+.sale-detail-total > div{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:12px 14px;
+  background:#fff;
+}
+
+.sale-detail-total span{
+  font-size:13px;
+  color:#6b7280;
+}
+
+.sale-detail-total strong{
+  font-size:14px;
+  color:#111827;
+}
+
+.sale-detail-total > div:nth-child(3) strong{
+  font-size:18px;
+}
+
+.sale-detail-total > div:nth-child(5) strong{
+  font-size:18px;
+}
+
+/* =====================================
+   PAYMENTS
+===================================== */
+.sale-detail-payments{
+  margin-top:20px;
+}
+
+.sale-detail-payments h3{
+  margin:0 0 10px;
+  font-size:16px;
+}
+
+.payment-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 14px;
+  margin-bottom:8px;
+  border:1px solid #e5e7eb;
+  border-radius:14px;
+  background:#fff;
+}
+
+.payment-row > div{
+  display:grid;
+  gap:4px;
+}
+
+.payment-row strong{
+  font-size:15px;
+  color:#111827;
+}
+
+.payment-row span{
+  font-size:12px;
+  color:#6b7280;
+}
+
+.payment-row small{
+  font-size:12px;
+  color:#6b7280;
+  text-align:right;
+  word-break:break-word;
+}
+
+/* =====================================
+   BACK BUTTON
+===================================== */
+#backToSaleSearchBtn{
+  width:100%;
+  margin-top:16px;
+}
